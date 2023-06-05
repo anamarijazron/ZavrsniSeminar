@@ -1,0 +1,58 @@
+﻿@page "/"
+@using Zavrsni.Rad.AnamarijaZron.Models;
+@inject HttpClient httpClient;
+@inject NavigationManager navManager;
+
+
+<PageTitle>AMR  Web Shop</PageTitle>
+
+
+<section class="header">
+    <div class="text-box">
+        <h1>Welcome to AMR Web Shop</h1>
+        <p>
+            Perfect site to find what you need
+        </p>
+    </div>
+</section>
+
+ 
+
+<h3>Category List</h3>
+
+<ul>
+    @foreach (var item in categories)
+    {
+        <li class="category-item">
+            <div class="category-content">
+                <div class="category-details">
+                    <h5 class="category-name">
+                        @item.CategoryName
+                    </h5>
+                    <p class="category-description">@item.CategoryDescription</p>
+                </div>
+            </div>
+        </li>
+    }
+</ul>
+
+
+
+
+
+@code {
+    private List<Category> categories = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await httpClient.GetAsync("https://expertshopapi.azurewebsites.net/api/Categories");
+        if (result.IsSuccessStatusCode)
+        {
+            categories = await result.Content.ReadFromJsonAsync<List<Category>>();
+
+        }
+    }
+
+   
+
+}

@@ -1,0 +1,88 @@
+﻿@page "/category/{id:int}/{categoryName}"
+@using Zavrsni.Rad.AnamarijaZron.Models;
+@inject HttpClient httpClient;
+@inject NavigationManager navManager;
+
+<h3>Category and Products</h3>
+<div class="category" id="@category.Id">
+
+    <h1>@category.CategoryName</h1>
+
+    <p>@category.CategoryDescription</p>
+    <img src="@category.ImagePath" width="300px" />
+<br>
+<br />
+
+    @foreach (var item in products)
+    {
+        <div class="product">
+            <h4 class="product-name">@item.ProductName</h4>
+            <p class="product-price">Price: @item.ProductPrice €</p>
+            <p class="product-description">@item.ProductDescription</p>
+
+            <button class="button button-center" @onclick="()=>DetailsGo(item.Id)">Details</button>
+        </div>
+    }
+
+</div>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public string CategoryName { get; set; }
+
+    private Category category = new Category();
+
+    private List<Product> products = new List<Product>();
+    protected override async Task OnInitializedAsync()
+    {
+        category = await GetCategory(Id);
+        products = await GetProducts(Id);
+        navManager.LocationChanged += LocationChanged;
+    }
+
+
+
+    public async Task<Category> GetCategory(int categoryId)
+    {
+        var baseUrl = Constants.BaseUrl;
+        var result = await httpClient.GetAsync($"{baseUrl}/Categories/{Id}");
+        if (result.IsSuccessStatusCode)
+        {
+            category = await result.Content.ReadFromJsonAsync<Category>();
+        }
+
+        return category;
+    }
+
+    public async Task<List<Product>> GetProducts(int categoryId)
+    {
+        var proizvodresult = await httpClient.GetAsync($"{Constants.BaseUrl}/Products/category-products/{Id}");
+        if (proizvodresult.IsSuccessStatusCode)
+        {
+            products = await proizvodresult.Content.ReadFromJsonAsync<List<Product>>();
+        }
+        return products;
+    }
+
+
+    async void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        category = await GetCategory(Id);
+        products = await GetProducts(Id);
+        StateHasChanged();
+    }
+
+
+    async void DetailsGo(int id)
+    {
+        navManager.NavigateTo($"/product-details/{id}/{category.CategoryName}");
+    }
+}
+
+
+
+
+

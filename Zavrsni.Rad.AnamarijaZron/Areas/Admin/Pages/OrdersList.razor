@@ -1,0 +1,47 @@
+﻿@page "/Admin/orders-list"
+@using Zavrsni.Rad.AnamarijaZron.Models;
+@inject HttpClient httpClient;
+@inject NavigationManager navManager;
+
+<h3>Orders List</h3>
+
+
+<ul>
+    @foreach (var item in distinctOrders)
+    {
+        <li>
+            <div class="order-container">
+                <h4 class="order-title">Order number: @item.OrderId</h4>
+                <ul>
+                    @foreach (var product in ordersList.Where(x => x.OrderId == item.OrderId).ToList())
+                    {
+                        <li>
+                            <div class="product-details">
+                                <p>ID product: @product.Id</p>
+                                <p>Price: @product.PricePerProduct €</p>
+                                <p>Pieces: @product.NumberOfItems</p>
+                                <p>Total: @product.TotalAmmount €</p>
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <p>Buyer: @item.OrderedByName</p>
+            </div>
+        </li>
+    }
+</ul>
+@code {
+    List<BuyItem> ordersList = new List<BuyItem>();
+    List<BuyItem> distinctOrders = new List<BuyItem>();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await httpClient.GetAsync("https://expertshopapi.azurewebsites.net/api/ShoppingCards");
+        if (result.IsSuccessStatusCode)
+        {
+            ordersList = await result.Content.ReadFromJsonAsync<List<BuyItem>>();
+
+            distinctOrders = ordersList.DistinctBy(x => x.OrderId).ToList();
+
+        }
+    }
+}

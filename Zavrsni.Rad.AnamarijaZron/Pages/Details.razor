@@ -1,0 +1,44 @@
+﻿@page "/product-details/{id:int}/{categoryName}"
+@inject HttpClient httpClient
+@inject ShoppingCartInMemory shoppingCartInMemory
+@inject NavigationManager navManager
+@using Models;
+
+
+
+<h3>Details</h3>
+<div class="tu">
+    <p class="prod-name">@productDetails.ProductName</p>
+    <p class="prod-description">@productDetails.ProductDescription</p>
+    <p>Price: @productDetails.ProductPrice €</p>
+    <p>Discount: @productDetails.Discount %</p>
+
+    <button class="button center" @onclick="()=>shoppingCartInMemory.AddToShoppingCart(productDetails.Id)">Add to cart</button>
+
+    <button type="button" class="button center" @onclick="Natrag">Back to list</button>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public string CategoryName { get; set; }
+    private Product productDetails = new Product();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await httpClient.GetAsync($"{Constants.BaseUrl}/Products/{Id}");
+        if (result.IsSuccessStatusCode)
+        {
+            productDetails = await result.Content.ReadFromJsonAsync<Product>();
+        }
+
+    }
+
+    public async Task Natrag()
+    {
+        navManager.NavigateTo($"/category/{productDetails.CategoryId}/{CategoryName}");
+
+    }
+
+
+}

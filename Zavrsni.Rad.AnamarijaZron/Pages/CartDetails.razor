@@ -1,0 +1,140 @@
+﻿@page "/cart"
+@using Models;
+@inject ShoppingCartInMemory shoppingCartInMemory;
+@inject NavigationManager navManager;
+
+
+<h3>Cart Details</h3>
+
+<h4>Total cash: @sumDiscount Eur</h4>
+<br />
+
+@{
+    double sum = 0;
+}
+<ul>
+
+    @foreach (var item in shoppingCartInMemory.selectedItems.OrderBy(x => x.ProductId))
+    {
+        <li>
+            <div>
+                <h4>  @item.Product.ProductName</h4>
+       
+              
+                <p>
+                    Price: @item.Product.ProductPrice €
+
+                </p>
+                <p>
+                    Discount: @item.Product.Discount %
+                </p>
+                <p>
+                    @{
+                        if (item.Product.Discount < 1)
+                        {
+                            var sumItem = Convert.ToDouble(item.Product.ProductPrice)
+                            * Convert.ToDouble(item.NumberOfItems);
+                            sum = sum + sumItem;
+                        <p>
+                            Product price: @sumItem
+                        </p>
+                        }
+                        else
+                        {
+                            var discount = ((Convert.ToDouble(item.Product.Discount) / 100)
+                            * Convert.ToDouble(item.Product.ProductPrice));
+                            var result = Math
+                            .Round(Convert.ToDouble(item.Product.ProductPrice) - discount, 2);
+                            result = result * item.NumberOfItems;
+                            sum = sum + result
+                            ;
+                       
+                        
+                            <p>
+                            Discounted price: @result €
+                    </p>
+                        <div>
+                            <button type="button" @onclick="()=>Decrement(item.ProductId)">-</button>
+                            <input type="number" @bind-value="item.NumberOfItems" width="30px;" disabled="disabled">
+                            <button type="button" @onclick="()=>Increment(item.ProductId)">+</button>
+                        </div>
+                        }
+                    }
+                </p>
+            </div>
+        </li>
+    }
+</ul>
+<p>
+    Total: @sum €
+</p>
+
+<button class="button button-center" @onclick="Checkout">Buy</button>
+@code {
+
+    double sumDiscount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Discount();
+    }
+
+    public async Task Checkout()
+    {
+
+        navManager.NavigateTo("/checkout");
+    }
+    public async Task Decrement(int prodId)
+    {
+        var decrease = shoppingCartInMemory.selectedItems.FirstOrDefault(x => x.ProductId == prodId);
+
+        if (decrease.NumberOfItems > 1)
+        {
+            shoppingCartInMemory.selectedItems.Remove(decrease);
+            decrease.NumberOfItems = decrease.NumberOfItems - 1;
+            shoppingCartInMemory.selectedItems.Add(decrease);
+            await Discount();
+            StateHasChanged();
+        }
+    }
+
+    public async Task Increment(int prodId)
+    {
+        var decrease = shoppingCartInMemory.selectedItems.FirstOrDefault(x => x.ProductId == prodId);
+        shoppingCartInMemory.selectedItems.Remove(decrease);
+
+        decrease.NumberOfItems = decrease.NumberOfItems + 1;
+        shoppingCartInMemory.selectedItems.Add(decrease);
+        await Discount();
+        StateHasChanged();
+    }
+
+    public async Task Discount()
+    {
+        sumDiscount = 0;
+        foreach (var item in shoppingCartInMemory.selectedItems.OrderBy(x => x.ProductId))
+        {
+            if (item.Product.Discount < 1)
+            {
+                sumDiscount = sumDiscount + Convert.ToDouble(item.Product.ProductPrice) *
+            Convert.ToDouble(item.NumberOfItems);
+
+            }
+            else
+            {
+
+                var getPrice = Convert.ToDouble(item.Product.ProductPrice);
+
+                var discount = ((Convert.ToDouble(item.Product.Discount) / 100) *
+                Convert.ToDouble(item.Product.ProductPrice));
+
+                getPrice = Math.Round(Convert.ToDouble(item.Product.ProductPrice) - discount, 2);
+
+                sumDiscount = sumDiscount + (getPrice * item.NumberOfItems);
+
+
+            }
+
+        }
+    }
+}

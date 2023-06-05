@@ -1,0 +1,64 @@
+﻿@page "/Admin/add-product"
+@using Zavrsni.Rad.AnamarijaZron.Models;
+@inject HttpClient httpClient
+@inject NavigationManager navManager
+
+
+<h3>Add Product</h3>
+@if (IsError)
+{
+    <div>
+        @*JOJ! dogodila se greška. Pokušajete ponovo.*@
+        @Constants.ErrorMessage
+    </div>
+
+}
+<form @onsubmit="ProductAdd">
+    <div class="row mb-3">
+        <label for="ProductName" class="col-sm-2 col-form-label">Product Name</label>
+        <div class="col-sm-10">
+            <input type="text" @bind-value="product.ProductName" class="form-control" id="ProductName">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="Product Description" class="col-sm-2 col-form-label">Product Description</label>
+        <div class="col-sm-10">
+            <input type="text" @bind-value="product.ProductDescription" class="form-control" id="ProductDescription">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="Product Price" class="col-sm-2 col-form-label">Product Price</label>
+        <div class="col-sm-10">
+            <input type="text" @bind-value="product.ProductPrice" class="form-control" id="ProductPrice">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="Discount" class="col-sm-2 col-form-label">Discount</label>
+        <div class="col-sm-10">
+            <input type="text" @bind-value="product.Discount" class="form-control" id="Product Discount">
+        </div>
+    </div>
+   
+ 
+    <button type="submit" class="button">Add Product</button>
+
+</form>
+
+@code {
+    private Product product = new Product();
+    private bool IsError = false;
+    private async Task ProductAdd()
+    {
+        var result = await httpClient.PostAsJsonAsync($"{Constants.BaseUrl}/Products", product);
+
+        if (result.IsSuccessStatusCode)
+        {
+            navManager.NavigateTo("/Admin/list-products");
+        }
+        else
+        {
+            IsError = true;
+            StateHasChanged();
+        }
+    }
+}

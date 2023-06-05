@@ -1,0 +1,58 @@
+﻿@page "/Admin/delete-product/{id:int}"
+@using Zavrsni.Rad.AnamarijaZron.Models;
+@inject HttpClient httpClient
+@inject NavigationManager navManager;
+@inject IJSRuntime jsRun;
+<h3>Delete Category</h3>
+
+<div class="prod1-container">
+    <h2 class="prod1-name">@product.ProductName</h2>
+    <p class="prod1-description">@product.ProductDescription</p>
+    <p class="prod1-hidden">@product.ProductPrice</p>
+
+    <div class="button-container">
+        <button type="button" class="btn-danger" @onclick="()=>Delete(product.Id)">
+           Delete
+        </button>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Product product= new Product();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await httpClient.GetAsync($"https://expertshopapi.azurewebsites.net/api/Products/{Id}");
+        if (result.IsSuccessStatusCode)
+        {
+            product = await result.Content.ReadFromJsonAsync<Product>();
+        }
+
+    }
+
+    private async Task Delete(int id)
+    {
+
+
+        var result = new HttpResponseMessage();
+
+        var confirm = await jsRun.InvokeAsync<bool>("confirm", "Jeste li sigurni da želite obrisati stavku?");
+        if (confirm == true)  
+        {
+
+            result = await httpClient.DeleteAsync($"https://expertshopapi.azurewebsites.net/api/Products/{Id}");
+        }
+        if (result.IsSuccessStatusCode)
+        {
+            navManager.NavigateTo("/Admin/list-products");
+        }
+    }
+}
+
+
+
+
