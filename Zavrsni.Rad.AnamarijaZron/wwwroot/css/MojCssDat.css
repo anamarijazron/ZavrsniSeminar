@@ -290,7 +290,52 @@ form {
     margin-top: 10px;
 }
 
-/* Cart Details*/
+/*index.razor --> ispod početne slike uređivanje linka */
+.link4 {
+    color: hotpink;
+    font-size: larger;
+    text-decoration: none;
+}
+
+    .link4:hover {
+        color: grey;
+    }
+
+/*Details*/
+.tu {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+}
+
+.prod-n {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.prod-d {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.price112, .disc1 {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/*Cart Details*/
+
+.shopping-cart {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+}
+
+.total-cash {
+    font-size: 24px;
+    font-weight: bold;
+}
 
 @media (max-width: 700px) {
     .row {

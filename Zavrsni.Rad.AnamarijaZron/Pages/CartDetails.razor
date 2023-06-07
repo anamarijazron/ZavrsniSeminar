@@ -6,13 +6,13 @@
 
 <h3>Cart Details</h3>
 
-<h4>Total cash: @sumDiscount Eur</h4>
+<h4 class="total-cash">Total cash: @sumDiscount Eur</h4>
 <br />
 
 @{
     double sum = 0;
 }
-<ul>
+<ul class="shopping-cart">
 
     @foreach (var item in shoppingCartInMemory.selectedItems.OrderBy(x => x.ProductId))
     {
@@ -65,9 +65,7 @@
         </li>
     }
 </ul>
-<p>
-    Total: @sum €
-</p>
+
 
 <button class="button button-center" @onclick="Checkout">Buy</button>
 @code {

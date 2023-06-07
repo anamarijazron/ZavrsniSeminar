@@ -14,6 +14,32 @@
 
 }
 <form @onsubmit="ProductAdd">
+
+    <div class="row mb-3">
+
+        <label for="SelectCat" class="col-sm-2 col-form-label">Pick Category</label>
+        <div class="col-sm-10">
+            <select @onchange=@(SelectCategory) class="form-control" id="SelectCat">
+
+                <option value="">--Select--</option>
+                @foreach (var cat in categories)
+                {
+                    if (cat.Id == product.CategoryId)
+                    {
+                        <option value="@cat.Id" selected>@cat.CategoryName</option>
+                    }
+                    else
+                    {
+                        <option value="@cat.Id">@cat.CategoryName</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+
+
+
     <div class="row mb-3">
         <label for="ProductName" class="col-sm-2 col-form-label">Product Name</label>
         <div class="col-sm-10">
@@ -45,8 +71,19 @@
 </form>
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
+    List<Category> categories = new List<Category>();
+  
     private Product product = new Product();
     private bool IsError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+            categories = await CategoryList();
+    }
+
     private async Task ProductAdd()
     {
         var result = await httpClient.PostAsJsonAsync($"{Constants.BaseUrl}/Products", product);
@@ -61,4 +98,25 @@
             StateHasChanged();
         }
     }
+    
+
+
+    private async Task SelectCategory(ChangeEventArgs e)
+    {
+        product.CategoryId = Convert.ToInt32(e.Value.ToString());
+    }
+
+    protected async Task<List<Category>> CategoryList()
+    {
+        var result = await httpClient.GetAsync("https://expertshopapi.azurewebsites.net/api/Categories");
+        if (result.IsSuccessStatusCode)
+        {
+            categories = await result.Content.ReadFromJsonAsync<List<Category>>();
+
+        }
+        return categories;
+    }
+
+
+
 }

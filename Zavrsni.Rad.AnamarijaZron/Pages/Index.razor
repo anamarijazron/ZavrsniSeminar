@@ -26,10 +26,17 @@
         <li class="category-item">
             <div class="category-content">
                 <div class="category-details">
-                    <h5 class="category-name">
-                        @item.CategoryName
+                    
+                    
+                    <p class="category-list">
+                        @{
+                            var url = $"/category/{item.Id}/{item.CategoryName}";
+                        }
+                        <a class="link4" href="@url">@item.CategoryName</a>
+                    </p>
+                    <h5 class="category-desc">
+                        @item.CategoryDescription
                     </h5>
-                    <p class="category-description">@item.CategoryDescription</p>
                 </div>
             </div>
         </li>

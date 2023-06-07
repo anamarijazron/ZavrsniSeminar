@@ -8,10 +8,10 @@
 
 <h3>Details</h3>
 <div class="tu">
-    <p class="prod-name">@productDetails.ProductName</p>
-    <p class="prod-description">@productDetails.ProductDescription</p>
-    <p>Price: @productDetails.ProductPrice €</p>
-    <p>Discount: @productDetails.Discount %</p>
+    <p class="prod-n">@productDetails.ProductName</p>
+    <p class="prod-d">@productDetails.ProductDescription</p>
+    <p class="price112">Price: @productDetails.ProductPrice €</p>
+    <p class="disc1">Discount: @productDetails.Discount %</p>
 
     <button class="button center" @onclick="()=>shoppingCartInMemory.AddToShoppingCart(productDetails.Id)">Add to cart</button>
 
