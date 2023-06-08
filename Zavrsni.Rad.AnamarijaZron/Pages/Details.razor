@@ -18,12 +18,14 @@
     <button type="button" class="button center" @onclick="Natrag">Back to list</button>
 </div>
 
+
 @code {
     [Parameter]
     public int Id { get; set; }
     [Parameter]
     public string CategoryName { get; set; }
-    private Product productDetails = new Product();
+private Product productDetails = new Product();
+
     protected override async Task OnInitializedAsync()
     {
         var result = await httpClient.GetAsync($"{Constants.BaseUrl}/Products/{Id}");
@@ -33,6 +35,7 @@
         }
 
     }
+
 
     public async Task Natrag()
     {

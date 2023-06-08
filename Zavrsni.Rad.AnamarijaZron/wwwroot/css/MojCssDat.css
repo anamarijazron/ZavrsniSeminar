@@ -337,6 +337,16 @@ form {
     font-weight: bold;
 }
 
+
+
+
+.success-message {
+    color: green;
+}
+
+
+
+
 @media (max-width: 700px) {
     .row {
         flex-direction: column;
