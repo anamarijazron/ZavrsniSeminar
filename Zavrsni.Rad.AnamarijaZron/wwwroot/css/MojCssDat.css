@@ -265,29 +265,34 @@ form {
     margin-bottom: 10px;
 }
 
-/*Delete Category u Dashboardu*/
+/*Delete Category i Delete product u Dashboardu*/
 
-.categ-container {
+.categ-container, .prod1-container {
     background-color: #fff;
     padding: 10px;
     margin-bottom: 10px;
 }
 
-.categ-name {
+.categ-name, .prod1-name {
     font-size: 24px;
     text-align: center;
 }
 
-.categ-description {
+.categ-description, .prod1-description {
     font-size: 16px;
+    font-weight: bold;
+    text-align: center;
 }
 
-.categ-hidden {
-    font-size: 12px;
+.categ-hidden, .prod1-price {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
 }
 
 .button-container {
     margin-top: 10px;
+    text-align: center;
 }
 
 /*index.razor --> ispod početne slike uređivanje linka */
@@ -340,9 +345,6 @@ form {
 
 
 
-.success-message {
-    color: green;
-}
 
 
 

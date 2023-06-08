@@ -9,6 +9,6 @@
 #else
         public static readonly string BaseUrl = "https://expertshopapi.azurewebsites.net/api";
 #endif
-        public static readonly string ErrorMessage = "Ups! Ima neka greška";
+        public static readonly string ErrorMessage = "Ups! There is a mistake!";
     }
 }

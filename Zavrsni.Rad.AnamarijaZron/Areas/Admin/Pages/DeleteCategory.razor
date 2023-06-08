@@ -7,7 +7,7 @@
 
 <div class="categ-container">
     <h2 class="categ-name">@category.CategoryName</h2>
-    <p class="categ-description">@category.CategoryDescription</p>
+    <p class="categ-description"> @category.CategoryDescription</p>
     <p class="categ-hidden">@category.IsHidden</p>
 
     <div class="button-container">
@@ -40,7 +40,7 @@
 
         var result = new HttpResponseMessage();
 
-        var confirm = await jsRun.InvokeAsync<bool>("confirm", "Jeste li sigurni da želite obrisati stavku?"); 
+        var confirm = await jsRun.InvokeAsync<bool>("confirm", "Are you sure you want to delete the item?");
         if (confirm == true) 
         {
 

@@ -39,6 +39,7 @@
         if (result.IsSuccessStatusCode)
         {
             ordersList = await result.Content.ReadFromJsonAsync<List<BuyItem>>();
+            ordersList = ordersList.OrderByDescending(x => x.Id).ToList();
 
             distinctOrders = ordersList.DistinctBy(x => x.OrderId).ToList();
 

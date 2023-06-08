@@ -6,8 +6,7 @@
 
 <h3>Cart Details</h3>
 
-<h4 class="total-cash">Total cash: @sumDiscount Eur</h4>
-<br />
+
 
 @{
     double sum = 0;
@@ -36,8 +35,13 @@
                             * Convert.ToDouble(item.NumberOfItems);
                             sum = sum + sumItem;
                         <p>
-                            Product price: @sumItem
+                            Product price: @sumItem €
                         </p>
+                        <div>
+                            <button type="button" @onclick="()=>Decrement(item.ProductId)">-</button>
+                            <input type="number" @bind-value="item.NumberOfItems" width="30px;" disabled="disabled">
+                            <button type="button" @onclick="()=>Increment(item.ProductId)">+</button>
+                        </div>
                         }
                         else
                         {
@@ -66,6 +70,7 @@
     }
 </ul>
 
+<h4 class="total-cash">Total cash: @sumDiscount €</h4>
 
 <button class="button button-center" @onclick="Checkout">Buy</button>
 @code {
